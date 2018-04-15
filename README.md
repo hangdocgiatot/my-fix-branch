@@ -1,37 +1,74 @@
-## Welcome to GitHub Pages
+# Friendly Pix Web
 
-You can use the [editor on GitHub](https://github.com/hangdocgiatot/my-fix-branch/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+Friendly Pix Web is a sample app demonstrating how to build a JavaScript/Web app with the Firebase Platform.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Friendly Pix is a place where you can share photos, follow friends, comment on photos...
 
-### Markdown
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Few words on dependencies
 
-```markdown
-Syntax highlighted code block
+Friendly Pix is built using Javascript, [Firebase](https://firebase.google.com/docs/web/setup) and jQuery. The Auth flow is built using [Firebase-UI](https://github.com/firebase/firebaseui-web). Javascript dependencies are managed using [bower](http://bower.io/) and Build/Deploy tools dependencies are managed using [npm](https://www.npmjs.com/). Also Friendly Pix is written in ES2015 so for wide browser support we'll transpile the code to ES5 using [BabelJs](http://babeljs.io). Additionally server-side micro-services are built on [Cloud Functions for Firebase](https://firebase.google.com/docs/functions).
 
-# Header 1
-## Header 2
-### Header 3
 
-- Bulleted
-- List
+## Create and configure your Firebase Project
 
-1. Numbered
-2. List
+1. In a console run `npm install` to install all Build/Deploy tools dependencies.
+1. Create a Firebase project using the [Firebase Console](https://firebase.google.com/console).
+1. Visit the **Storage** section and enable storage by clicking the **Getting Started** button.
+1. Enable **Google** as a Sign in provider in **Firebase Console > Authentication > Sign in Method** tab.
+1. Enable **Facebook** as a Sign in provider in **Firebase Console > Authentication > Sign in Method** tab. You'll need to provide your Facebook app's credentials. If you haven't yet you'll need to have created a Facebook app on [Facebook for Developers](https://developers.facebook.com)
+1. [Enable the Cloud Vision API](https://console.cloud.google.com/apis/api/vision.googleapis.com/overview?project=_) on your project and enable Billing.
+1. In a console run `firebase use --add` and, when prompted, select the Firebase Project you have just created. This will make sure the Firebase CLI is configured to use your particular project.
+1. To enable email notifications for flagged content, set the mailgun credentials using:
+    ```bash
+    firebase functions:config:set mailgun.domain=friendly-pix.com mailgun.key=key-XXXXXXXXXXXXXXXX
+    ```
 
-**Bold** and _Italic_ and `Code` text
 
-[Link](url) and ![Image](src)
+## Start a local development server
+
+You can start a local development server by running:
+
+```bash
+npm run serve
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+This will start `firebase serve` and make sure your Javascript files are transpiled automatically to ES5.
 
-### Jekyll Themes
+Then open [http://localhost:5000](http://localhost:5000)
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/hangdocgiatot/my-fix-branch/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+> Note 1: On new projects, the Realtime Database and Cloud Storage come with default Security rules that prevent all read and writes. You'll need to deploy the security rules and Cloud Functions once first. For this run: `firebase deploy --only database,storage`
 
-### Support or Contact
+> Note 2: Cloud Functions cannot yet be ran locally. Deploy them once first if you want these features active (such as image and text moderation). For this run: `firebase deploy --only functions,`
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+
+## Deploy the app
+
+To deploy the app run:
+
+```bash
+firebase deploy
+```
+
+Before deploying this will automatically install all runtime dependencies, transpile the Javascript code to ES5 and install Cloud Functions dependencies.
+Then this deploys a new version of your code that will be served from `https://<PROJECT_ID>.firebaseapp.com`
+
+
+## Mobile Apps
+
+The [Android](https://github.com/firebase/friendlypix-android) and [iOS](https://github.com/firebase/friendlypix-ios) versions of FriendlyPix need the Cloud Functions, the Realtime Database rules and the Cloud Storage rules to be deployed to work properly. To deploy these run:
+
+```bash
+firebase deploy --only functions,database,storage
+```
+
+
+## Contributing
+
+We'd love that you contribute to the project. Before doing so please read our [Contributor guide](CONTRIBUTING.md).
+
+
+## License
+
+© Google, 2011. Licensed under an [Apache-2](LICENSE) license.
+
